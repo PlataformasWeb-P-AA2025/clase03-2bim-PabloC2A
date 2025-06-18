@@ -89,3 +89,32 @@ def eliminar_estudiante(request, id):
     estudiante = Estudiante.objects.get(pk=id)
     estudiante.delete()
     return redirect(index)
+
+
+def obtener_pais(request, id):
+    # Se obtiene el país por su ID
+    pais = Pais.objects.get(pk=id)
+    informacion_template = {'pais': pais}
+    return render(request, 'obtener_pais.html', informacion_template)
+
+def listar_pais(request):
+    # Obtener todos los registros de Pais
+    paises = Pais.objects.all()
+    # Preparar el contexto con la lista y el número total de países
+    contexto = {
+        'paises': paises,
+        'numero_paises': paises.count()  # también puedes usar len(paises)
+    }
+    # Renderizar el template 'listar_pais.html' pasando el contexto
+    return render(request, 'listar_pais.html', contexto)
+
+def crear_pais(request):
+    if request.method == 'POST':
+        formulario = PaisForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('index')  # Puedes redirigir a la lista principal o donde prefieras
+    else:
+        formulario = PaisForm()
+    diccionario = {'formulario': formulario}
+    return render(request, 'crearPais.html', diccionario)

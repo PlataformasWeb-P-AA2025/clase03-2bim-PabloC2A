@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Países</title>
+</head>
+<body>
+    <h2>Listado de Países</h2>
+    <p>Número de países: {{ numero_paises }}</p>
+    <ul>
+        {% for pais in paises %}
+            <li>
+                {{ pais.nombre }} - Capital: {{ pais.capital }} -
+                Provincias: {{ pais.numero_provincias }} - Habitantes: {{ pais.numero_habitantes }}
+                [<a href="{% url 'obtener_pais' pais.id %}">Ver detalles</a>]
+            </li>
+        {% endfor %}
+    </ul>
+    <!-- Enlace para agregar un nuevo país -->
+    <a href="{% url 'crear_pais' %}">Agregar País</a>
+    <br>
+    <!-- Enlace para volver a la página de países -->
+    <a href="{% url 'listar_pais' %}">Inicio</a>
+</body>
+</html>

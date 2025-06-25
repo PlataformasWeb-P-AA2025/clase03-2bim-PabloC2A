@@ -47,15 +47,16 @@ class Modulo(models.Model):
     def __str__(self):
         return "Módulo: %s" % (self.nombre)
 
-
 class Matricula(models.Model):
     """
+    Representa la matrícula de un estudiante en un módulo.
     """
     estudiante = models.ForeignKey(Estudiante, related_name='lasmatriculas',
             on_delete=models.CASCADE)
     modulo = models.ForeignKey(Modulo, related_name='lasmatriculas',
             on_delete=models.CASCADE)
     comentario = models.CharField(max_length=200)
+    costo = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)  # nuevo campo
 
     def __str__(self):
         return "Matricula: Estudiante(%s) - Modulo(%s)" % \

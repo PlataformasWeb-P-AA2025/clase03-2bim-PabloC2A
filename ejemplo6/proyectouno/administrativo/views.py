@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render
+from django.db import models
 
 # importar las clases de models.py
 from administrativo.models import Matricula, Estudiante
@@ -11,13 +12,23 @@ from administrativo.forms import MatriculaForm, MatriculaEditForm
 # el nombre de la vista es index.
 
 def index(request):
-    """
-    """
     matriculas = Matricula.objects.all()
+    estudiantes = Estudiante.objects.all().prefetch_related('lasmatriculas__modulo')
+
+    # Añadir atributo total_costo a cada estudiante
+    for est in estudiantes:
+        total = est.obtener_matriculas().aggregate(
+            total_costo=models.Sum('costo')
+        )['total_costo'] or 0
+        est.total_costo = total  # atributo dinámico
 
     titulo = "Listado de matriculas"
-    informacion_template = {'matriculas': matriculas,
-    'numero_matriculas': len(matriculas), 'mititulo': titulo}
+    informacion_template = {
+        'matriculas': matriculas,
+        'numero_matriculas': len(matriculas),
+        'mititulo': titulo,
+        'estudiantes': estudiantes,
+    }
     return render(request, 'index.html', informacion_template)
 
 

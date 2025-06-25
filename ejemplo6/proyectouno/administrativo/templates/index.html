@@ -31,3 +31,36 @@
   {% endfor %}
 
 </table>
+
+<h2>Lista de Estudiantes</h2>
+<table border="1">
+  <tr>
+    <th>Nombre</th>
+    <th>Apellido</th>
+    <th>Tipo</th>
+    <th>Edad</th>
+    <th>Matrículas</th>
+  </tr>
+
+  {% for estudiante in estudiantes %}
+  <tr>
+    <td>{{ estudiante.nombre }}</td>
+    <td>{{ estudiante.apellido }}</td>
+    <td>{{ estudiante.get_tipo_estudiante_display }}</td>
+    <td>{{ estudiante.edad }}</td>
+    <td>
+  {% if estudiante.obtener_matriculas %}
+    <ul style="list-style:none; padding-left: 0; margin: 0;">
+      {% for m in estudiante.obtener_matriculas %}
+        <li>Módulo: {{ m.modulo.nombre }} - Costo: ${{ m.costo }}</li>
+      {% endfor %}
+      <li><b>Costo Total: ${{ estudiante.total_costo }}</b></li>
+    </ul>
+  {% else %}
+    No tiene matrículas.
+  {% endif %}
+  </td>
+  </tr>
+  {% endfor %}
+</table>
+

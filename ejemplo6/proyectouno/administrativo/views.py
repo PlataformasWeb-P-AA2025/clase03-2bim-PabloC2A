@@ -13,23 +13,20 @@ from administrativo.forms import MatriculaForm, MatriculaEditForm
 
 def index(request):
     matriculas = Matricula.objects.all()
-    estudiantes = Estudiante.objects.all().prefetch_related('lasmatriculas__modulo')
+    estudiantes = Estudiante.objects.prefetch_related('lasmatriculas__modulo')
 
-    # Añadir atributo total_costo a cada estudiante
     for est in estudiantes:
-        total = est.obtener_matriculas().aggregate(
-            total_costo=models.Sum('costo')
-        )['total_costo'] or 0
-        est.total_costo = total  # atributo dinámico
+        total = sum(m.costo for m in est.obtener_matriculas())
+        est.total_costo = total
 
     titulo = "Listado de matriculas"
-    informacion_template = {
+    contexto = {
         'matriculas': matriculas,
-        'numero_matriculas': len(matriculas),
+        'numero_matriculas': matriculas.count(),
         'mititulo': titulo,
         'estudiantes': estudiantes,
     }
-    return render(request, 'index.html', informacion_template)
+    return render(request, 'index.html', contexto)
 
 
 def detalle_matricula(request, id):

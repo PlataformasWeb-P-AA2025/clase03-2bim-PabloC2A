@@ -26,6 +26,10 @@ class Estudiante(models.Model):
 
     def obtener_matriculas(self):
         return self.lasmatriculas.all()
+
+    def matriculas_con_costo(self):
+        # Retorna módulo y costo
+        return [f"Módulo: {m.modulo.nombre} - Costo: ${m.costo}" for m in self.lasmatriculas.all()]
         
 
 class Modulo(models.Model):
